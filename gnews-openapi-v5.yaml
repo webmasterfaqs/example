@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: GNews Top-Headlines API
+  title: NewsAPI.org Top Headlines API
   version: "1.0.1"
 servers:
   - url: https://newsapi.org/v2
@@ -10,9 +10,6 @@ components:
     bearerAuth:
       type: http
       scheme: bearer       # or "basic" if that’s what the service accepts
-security:
-  - bearerAuth: []
-
   schemas:
     Article:
       type: object
@@ -21,7 +18,7 @@ security:
         description:  { type: string, nullable: true }
         content:      { type: string, nullable: true }
         url:          { type: string, format: uri }
-        image:        { type: string, format: uri, nullable: true }
+        urlToImage:   { type: string, format: uri, nullable: true }
         publishedAt:  { type: string, format: date-time }
         source:
           type: object
@@ -31,11 +28,13 @@ security:
     TopHeadlinesResponse:
       type: object
       properties:
-        totalArticles: { type: integer }
+        totalResults: { type: integer }
         articles:
           type: array
           items:
             $ref: '#/components/schemas/Article'
+security:
+  - bearerAuth: []
 
 paths:
   /top-headlines:
@@ -43,7 +42,7 @@ paths:
       operationId: getTopHeadlines
       summary: Get recent news
       security:
-        - gnewsApiKey: []       # ← tells wizard the endpoint *requires* token
+        - bearerAuth: []
       parameters:
         - name: lang
           in: query
