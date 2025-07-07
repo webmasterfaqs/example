@@ -7,10 +7,11 @@ servers:
 
 components:
   securitySchemes:
-    gnewsApiKey:               # ← enables the “Change method” link
-      type: apiKey
-      in: query
-      name: token
+    bearerAuth:
+      type: http
+      scheme: bearer       # or "basic" if that’s what the service accepts
+security:
+  - bearerAuth: []
 
   schemas:
     Article:
