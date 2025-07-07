@@ -1,0 +1,65 @@
+openapi: 3.0.3
+info:
+  title: GNews Top-Headlines API
+  version: "1.0.1"
+servers:
+  - url: https://newsapi.org/v2
+
+components:
+  securitySchemes:
+    gnewsApiKey:               # ← enables the “Change method” link
+      type: apiKey
+      in: query
+      name: token
+
+  schemas:
+    Article:
+      type: object
+      properties:
+        title:        { type: string }
+        description:  { type: string, nullable: true }
+        content:      { type: string, nullable: true }
+        url:          { type: string, format: uri }
+        image:        { type: string, format: uri, nullable: true }
+        publishedAt:  { type: string, format: date-time }
+        source:
+          type: object
+          properties:
+            name: { type: string }
+            url:  { type: string, format: uri }
+    TopHeadlinesResponse:
+      type: object
+      properties:
+        totalArticles: { type: integer }
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+
+paths:
+  /top-headlines:
+    get:
+      operationId: getTopHeadlines
+      summary: Get recent news
+      security:
+        - gnewsApiKey: []       # ← tells wizard the endpoint *requires* token
+      parameters:
+        - name: lang
+          in: query
+          schema: { type: string, minLength: 2, maxLength: 2 }
+        - name: country
+          in: query
+          schema: { type: string, minLength: 2, maxLength: 2 }
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: max
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
