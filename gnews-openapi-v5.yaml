@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: GNews Top-Headlines API
+  title: NewsAPI.org Top Headlines API
   version: "1.0.1"
 servers:
   - url: https://newsapi.org/v2
@@ -10,9 +10,6 @@ components:
     bearerAuth:
       type: http
       scheme: bearer       # or "basic" if that’s what the service accepts
-security:
-  - bearerAuth: []
-
   schemas:
     Article:
       type: object
@@ -21,7 +18,7 @@ security:
         description:  { type: string, nullable: true }
         content:      { type: string, nullable: true }
         url:          { type: string, format: uri }
-        image:        { type: string, format: uri, nullable: true }
+        urlToImage:   { type: string, format: uri, nullable: true }
         publishedAt:  { type: string, format: date-time }
         source:
           type: object
@@ -31,11 +28,13 @@ security:
     TopHeadlinesResponse:
       type: object
       properties:
-        totalArticles: { type: integer }
+        totalResults: { type: integer }
         articles:
           type: array
           items:
             $ref: '#/components/schemas/Article'
+security:
+  - bearerAuth: []
 
 paths:
   /top-headlines:
@@ -43,20 +42,536 @@ paths:
       operationId: getTopHeadlines
       summary: Get recent news
       security:
-        - gnewsApiKey: []       # ← tells wizard the endpoint *requires* token
+        - bearerAuth: []
       parameters:
-        - name: lang
-          in: query
-          schema: { type: string, minLength: 2, maxLength: 2 }
         - name: country
           in: query
           schema: { type: string, minLength: 2, maxLength: 2 }
         - name: category
           in: query
           schema: { type: string }
-        - name: max
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
           in: query
           schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/us/business:
+    get:
+      operationId: getUsBusinessHeadlines
+      summary: Get US business headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [us] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [business] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/us/entertainment:
+    get:
+      operationId: getUsEntertainmentHeadlines
+      summary: Get US entertainment headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [us] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [entertainment] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/us/general:
+    get:
+      operationId: getUsGeneralHeadlines
+      summary: Get US general headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [us] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [general] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/us/health:
+    get:
+      operationId: getUsHealthHeadlines
+      summary: Get US health headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [us] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [health] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/us/science:
+    get:
+      operationId: getUsScienceHeadlines
+      summary: Get US science headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [us] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [science] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/us/sports:
+    get:
+      operationId: getUsSportsHeadlines
+      summary: Get US sports headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [us] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [sports] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/us/technology:
+    get:
+      operationId: getUsTechnologyHeadlines
+      summary: Get US technology headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [us] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [technology] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/gb/business:
+    get:
+      operationId: getGbBusinessHeadlines
+      summary: Get Great Britain business headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [gb] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [business] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/gb/entertainment:
+    get:
+      operationId: getGbEntertainmentHeadlines
+      summary: Get Great Britain entertainment headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [gb] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [entertainment] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/gb/general:
+    get:
+      operationId: getGbGeneralHeadlines
+      summary: Get Great Britain general headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [gb] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [general] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/gb/health:
+    get:
+      operationId: getGbHealthHeadlines
+      summary: Get Great Britain health headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [gb] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [health] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/gb/science:
+    get:
+      operationId: getGbScienceHeadlines
+      summary: Get Great Britain science headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [gb] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [science] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/gb/sports:
+    get:
+      operationId: getGbSportsHeadlines
+      summary: Get Great Britain sports headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [gb] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [sports] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/gb/technology:
+    get:
+      operationId: getGbTechnologyHeadlines
+      summary: Get Great Britain technology headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [gb] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [technology] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TopHeadlinesResponse' }
+
+  /top-headlines/in/business:
+    get:
+      operationId: getInBusinessHeadlines
+      summary: Get India business headlines
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: country
+          in: query
+          required: true
+          schema: { type: string, enum: [in] }
+        - name: category
+          in: query
+          required: true
+          schema: { type: string, enum: [business] }
+        - name: sources
+          in: query
+          schema: { type: string }
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: pageSize
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100 }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 1 }
       responses:
         "200":
           description: ok
