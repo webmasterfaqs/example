@@ -1,0 +1,26 @@
+openapi: 3.0.3
+info:
+  title: ISS Now API
+  version: "1.0.0"
+servers:
+  - url: https://api.open-notify.org
+paths:
+  /iss-now.json:
+    get:
+      operationId: getIssPos
+      summary: Current ISS latitude / longitude
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:      { type: string }
+                  timestamp:    { type: integer }
+                  iss_position:
+                    type: object
+                    properties:
+                      latitude:  { type: string }
+                      longitude: { type: string }
